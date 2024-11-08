@@ -15,24 +15,9 @@
       background-color: black; /* Background color for the video */
       border: none;
     }
-    .fullscreen-button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      padding: 10px;
-      background: rgba(0, 0, 0, 0.5);
-      color: white;
-      border: none;
-      font-size: 16px;
-      cursor: pointer;
-      z-index: 1000;
-    }
   </style>
 </head>
 <body>
-
-  <!-- Fullscreen Button -->
-  <button class="fullscreen-button" onclick="toggleFullscreen()">Fullscreen</button>
 
   <!-- Video element for streaming -->
   <video id="video" controls></video>
@@ -53,20 +38,6 @@
       video.addEventListener('loadedmetadata', function () {
         video.play();
       });
-    }
-
-    // Fullscreen function
-    function toggleFullscreen() {
-      const video = document.getElementById('video');
-      if (video.requestFullscreen) {
-        video.requestFullscreen();
-      } else if (video.mozRequestFullScreen) { // Firefox
-        video.mozRequestFullScreen();
-      } else if (video.webkitRequestFullscreen) { // Chrome, Safari and Opera
-        video.webkitRequestFullscreen();
-      } else if (video.msRequestFullscreen) { // IE/Edge
-        video.msRequestFullscreen();
-      }
     }
   </script>
 
