@@ -6,38 +6,46 @@
   <title>ARM 2024 Malayalam 4K</title>
   <style>
     body {
-      background-color: black;
-      color: white;
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+      background-color: black; /* Set background to black */
       margin: 0;
       padding: 0;
-      text-align: center;
+      color: white; /* Set text color to white */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
     video {
       width: 100%;
-      height: auto;
-      max-height: 80vh;
-      background-color: black;
+      height: 100%;
+      background-color: black; /* Background color for the video */
       border: none;
-    }
-    h1 {
-      margin-top: 20px;
-      font-size: 2em;
     }
   </style>
 </head>
 <body>
 
-  <h1>ARM 2024 Malayalam 4K</h1>
-  <video id="moviePlayer" controls crossorigin="anonymous">
-    <source src="https://video-downloads.googleusercontent.com/ADGPM2mUMeZIBfAjt4uHhHAd0Cgl631Va5R4MTXLsMEidJUjMUopTHS8ag-D4abwkOQkZ8a1kC4yP8BBMVwLyY_iUlTXs5UNkteVqquYM6xTzdjQK_w37RWSoAUXV9GATDkncZf6Q59uEs03S-NTIPajIpHLE1aBQl_cAD3sBRGQ14vrEe96iyT4a-cCxlAtFVawT76j49XTY2Pyf3VTssTSvui0PHa956N9nWhuTuGpcdyvel0qvToXllGkNcvytyHAOpitWCX2tc-nzKfHHfLUK_fx7xqFfubwX4pXJYWF9ipPQAO60Yvnq9Zo8qo6WlM_oEKPBDWd3-OZ9gOzXgcVZovaPJC8LgAoaMU-GHPIFFWaBcCXe51pd89wLphpcFqYvqK9TgHVC9nfr-eRfflHXvcQid1bsI2Qi-EfAmfh4_xqlmOAfDnkYEJcS9Evm74fPqOqv7GVa5VfSoWv65XV8jVr4KgO5nsPxkyJwwOmmPo63vCVWjTjGOTWN0YAxnzNK9i2BF3JxdlWSWIqz8UsWBLHUElHgUjCUXuNCKeOmV9cIfR4xRsJSQuEmd1pKCWDj465jv7bsEppb8wfcCIi64pRxGZVXx46SM9od3OBOVsQ3_Nhca80qkAQ9QBftROcpmFJ0i_vpy71kUkM_V7gu85y_l-A0wkI7mwAK3YbolPzX2IIF-6vt88A2uzXppvoYv8HsaTrq1ennkpeSiXyH-UDMiAd5L4xwibqQmEuMXrMYgmYy7AgCEgSFUBpO3e1SEs8VlaDxho4jzvNfT1N9hkIUc9C2i2O6gKhGJGk2jZmOok46-NE8YnRUWWe8yB99_Xkbu7mjZFR_wN2m6HTFA8Wsmbb3ekebsp3LlsTipMJwnipEUUZtc-ITebzeawZPkRlhVoZ6QZSQC7T_4RKqUF7G1_E1hd4J5iOw-shdUFDa_BaOURXOTFGD0ah1lUSZZNqrdUEZBIRbOM-U_lmGQVw_-lQREAwAl9p6Tky9vly-KF6yfHZhZOuZiBRCCaQWSc6CPTFvCH4TKNrRbd8tzdaiXcTN-xnCRjUd4m6885_c4dZvXtIiocnQxtkffEgg6oW91Y4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
+  <!-- Video element for streaming -->
+  <video id="video" controls></video>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
+    if (Hls.isSupported()) {
+      var video = document.getElementById('video');
+      var hls = new Hls();
+      hls.loadSource('https://video-downloads.googleusercontent.com/ADGPM2mUMeZIBfAjt4uHhHAd0Cgl631Va5R4MTXLsMEidJUjMUopTHS8ag-D4abwkOQkZ8a1kC4yP8BBMVwLyY_iUlTXs5UNkteVqquYM6xTzdjQK_w37RWSoAUXV9GATDkncZf6Q59uEs03S-NTIPajIpHLE1aBQl_cAD3sBRGQ14vrEe96iyT4a-cCxlAtFVawT76j49XTY2Pyf3VTssTSvui0PHa956N9nWhuTuGpcdyvel0qvToXllGkNcvytyHAOpitWCX2tc-nzKfHHfLUK_fx7xqFfubwX4pXJYWF9ipPQAO60Yvnq9Zo8qo6WlM_oEKPBDWd3-OZ9gOzXgcVZovaPJC8LgAoaMU-GHPIFFWaBcCXe51pd89wLphpcFqYvqK9TgHVC9nfr-eRfflHXvcQid1bsI2Qi-EfAmfh4_xqlmOAfDnkYEJcS9Evm74fPqOqv7GVa5VfSoWv65XV8jVr4KgO5nsPxkyJwwOmmPo63vCVWjTjGOTWN0YAxnzNK9i2BF3JxdlWSWIqz8UsWBLHUElHgUjCUXuNCKeOmV9cIfR4xRsJSQuEmd1pKCWDj465jv7bsEppb8wfcCIi64pRxGZVXx46SM9od3OBOVsQ3_Nhca80qkAQ9QBftROcpmFJ0i_vpy71kUkM_V7gu85y_l-A0wkI7mwAK3YbolPzX2IIF-6vt88A2uzXppvoYv8HsaTrq1ennkpeSiXyH-UDMiAd5L4xwibqQmEuMXrMYgmYy7AgCEgSFUBpO3e1SEs8VlaDxho4jzvNfT1N9hkIUc9C2i2O6gKhGJGk2jZmOok46-NE8YnRUWWe8yB99_Xkbu7mjZFR_wN2m6HTFA8Wsmbb3ekebsp3LlsTipMJwnipEUUZtc-ITebzeawZPkRlhVoZ6QZSQC7T_4RKqUF7G1_E1hd4J5iOw-shdUFDa_BaOURXOTFGD0ah1lUSZZNqrdUEZBIRbOM-U_lmGQVw_-lQREAwAl9p6Tky9vly-KF6yfHZhZOuZiBRCCaQWSc6CPTFvCH4TKNrRbd8tzdaiXcTN-xnCRjUd4m6885_c4dZvXtIiocnQxtkffEgg6oW91Y4');
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, function () {
+        video.play();
+      });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      // For browsers that support HLS natively (like Safari)
+      video.src = 'https://video-downloads.googleusercontent.com/ADGPM2mUMeZIBfAjt4uHhHAd0Cgl631Va5R4MTXLsMEidJUjMUopTHS8ag-D4abwkOQkZ8a1kC4yP8BBMVwLyY_iUlTXs5UNkteVqquYM6xTzdjQK_w37RWSoAUXV9GATDkncZf6Q59uEs03S-NTIPajIpHLE1aBQl_cAD3sBRGQ14vrEe96iyT4a-cCxlAtFVawT76j49XTY2Pyf3VTssTSvui0PHa956N9nWhuTuGpcdyvel0qvToXllGkNcvytyHAOpitWCX2tc-nzKfHHfLUK_fx7xqFfubwX4pXJYWF9ipPQAO60Yvnq9Zo8qo6WlM_oEKPBDWd3-OZ9gOzXgcVZovaPJC8LgAoaMU-GHPIFFWaBcCXe51pd89wLphpcFqYvqK9TgHVC9nfr-eRfflHXvcQid1bsI2Qi-EfAmfh4_xqlmOAfDnkYEJcS9Evm74fPqOqv7GVa5VfSoWv65XV8jVr4KgO5nsPxkyJwwOmmPo63vCVWjTjGOTWN0YAxnzNK9i2BF3JxdlWSWIqz8UsWBLHUElHgUjCUXuNCKeOmV9cIfR4xRsJSQuEmd1pKCWDj465jv7bsEppb8wfcCIi64pRxGZVXx46SM9od3OBOVsQ3_Nhca80qkAQ9QBftROcpmFJ0i_vpy71kUkM_V7gu85y_l-A0wkI7mwAK3YbolPzX2IIF-6vt88A2uzXppvoYv8HsaTrq1ennkpeSiXyH-UDMiAd5L4xwibqQmEuMXrMYgmYy7AgCEgSFUBpO3e1SEs8VlaDxho4jzvNfT1N9hkIUc9C2i2O6gKhGJGk2jZmOok46-NE8YnRUWWe8yB99_Xkbu7mjZFR_wN2m6HTFA8Wsmbb3ekebsp3LlsTipMJwnipEUUZtc-ITebzeawZPkRlhVoZ6QZSQC7T_4RKqUF7G1_E1hd4J5iOw-shdUFDa_BaOURXOTFGD0ah1lUSZZNqrdUEZBIRbOM-U_lmGQVw_-lQREAwAl9p6Tky9vly-KF6yfHZhZOuZiBRCCaQWSc6CPTFvCH4TKNrRbd8tzdaiXcTN-xnCRjUd4m6885_c4dZvXtIiocnQxtkffEgg6oW91Y4';
+      video.addEventListener('loadedmetadata', function () {
+        video.play();
+      });
+    }
+  </script>
 
 </body>
 </html>
