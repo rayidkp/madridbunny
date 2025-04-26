@@ -29,14 +29,14 @@
   var video = document.getElementById('video');
   if (Hls.isSupported()) {
     var hls = new Hls();
-    hls.loadSource('https://sportflix.live/welive2/livestream/f86f77a45c/master.m3u8');
+    hls.loadSource('https://d1mxwlfauc8jhk.cloudfront.net/out/v1/5a57eeb353e7461db6435f532b15ddf6/index.m3u8');
     hls.attachMedia(video);
     hls.on(Hls.Events.MANIFEST_PARSED, function () {
       video.play();
     });
   } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
     // For Safari and iOS
-    video.src = 'https://sportflix.live/welive2/livestream/f86f77a45c/master.m3u8';
+    video.src = 'https://d1mxwlfauc8jhk.cloudfront.net/out/v1/5a57eeb353e7461db6435f532b15ddf6/index.m3u8';
     video.addEventListener('loadedmetadata', function () {
       video.play();
     });
