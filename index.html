@@ -30,14 +30,14 @@
     if (Hls.isSupported()) {
       var video = document.getElementById('video');
       var hls = new Hls();
-      hls.loadSource('https://prod-sports-south-cf.jiocinema.com/hls/live/2109676/hd_akamai_merged_avc_isl_mal_m1101124/master.m3u8');
+      hls.loadSource('https://sportflix.live/welive2/livestream/f86f77a45c/master.m3u8');
       hls.attachMedia(video);
       hls.on(Hls.Events.MANIFEST_PARSED, function () {
         video.play();
       });
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
       // For Safari
-      video.src = 'https://prod-sports-south-cf.jiocinema.com/hls/live/2109676/hd_akamai_merged_avc_isl_mal_m1101124/master.m3u8';
+      video.src = 'https://sportflix.live/welive2/livestream/f86f77a45c/master.m3u8';
       video.addEventListener('loadedmetadata', function () {
         video.play();
       });
