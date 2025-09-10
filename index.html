@@ -1,50 +1,93 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Live Stream</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>HLS Stream</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      background-color: black;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    video {
-      width: 100%;
-      height: 100%;
-      background-color: black;
-      border: none;
-    }
+    html,body { height:100%; margin:0; background:#000; }
+    #player { width:100%; height:100vh; display:block; background:#000; }
   </style>
 </head>
 <body>
-
-  <video id="video" controls autoplay></video>
+  <video id="player" controls playsinline crossorigin="anonymous"></video>
 
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script>
-    const video = document.getElementById('video');
-    const streamURL = 'https://dai.fancode.com/primary/136732_english_hls_877e5c48d829506ta-di_h264/index.m3u8';
+    (function(){
+      const video = document.getElementById('player');
+      const streamURL = 'https://dai.fancode.com/primary/136732_english_hls_877e5c48d829506ta-di_h264/index.m3u8'; // your stream
 
-    if (Hls.isSupported()) {
-      const hls = new Hls();
-      hls.loadSource(streamURL);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        video.play().catch(err => console.warn("Autoplay prevented:", err));
+      // helper to log nicely
+      function log(...args){ console.log('[STREAM]', ...args); }
+      function err(...args){ console.error('[STREAM]', ...args); }
+
+      if (Hls.isSupported()) {
+        const hls = new Hls({
+          debug: true,
+          // Optional: tweak buffer settings if needed
+          // maxBufferLength: 30,
+          // maxMaxBufferLength: 600,
+          // xhrSetup: function(xhr, url) {
+          //   // If the stream requires cookies/auth, uncomment:
+          //   // xhr.withCredentials = true;
+          // }
+        });
+
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+          log('Manifest parsed — levels:', hls.levels.length);
+          video.play().catch(e => log('Autoplay prevented:', e.message));
+        });
+
+        hls.on(Hls.Events.ERROR, function(event, data) {
+          err('HLS.js error event:', event, data);
+          // data.type : NETWORK_ERROR | MEDIA_ERROR | OTHER_ERROR
+          if (data.fatal) {
+            switch (data.type) {
+              case Hls.ErrorTypes.NETWORK_ERROR:
+                err('Fatal network error — attempting to restart load');
+                hls.startLoad();
+                break;
+              case Hls.ErrorTypes.MEDIA_ERROR:
+                err('Fatal media error — attempting recover');
+                hls.recoverMediaError();
+                break;
+              default:
+                err('Unrecoverable error, destroying hls instance');
+                hls.destroy();
+                break;
+            }
+          }
+        });
+
+        // Attach and load
+        hls.attachMedia(video);
+        hls.loadSource(streamURL);
+
+        // optional: listen to video element errors too
+        video.addEventListener('error', function(e){
+          err('Video element error:', e);
+        }, true);
+
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        // Safari fallback
+        log('Native HLS support detected (Safari).');
+        video.src = streamURL;
+        video.addEventListener('loadedmetadata', function() {
+          video.play().catch(e => log('Autoplay prevented:', e.message));
+        });
+        video.addEventListener('error', function(e){ err('Video element error (native):', e); });
+      } else {
+        err('This browser does not support HLS playback.');
+      }
+
+      // Extra tip: show CORS issues clearly
+      window.addEventListener('error', function(ev) {
+        if (ev && ev.message && ev.message.indexOf('Cross-Origin') !== -1) {
+          err('Detected CORS issue:', ev.message);
+        }
       });
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      video.src = streamURL;
-      video.addEventListener('loadedmetadata', () => {
-        video.play().catch(err => console.warn("Autoplay prevented:", err));
-      });
-    }
+    })();
   </script>
-
 </body>
 </html>
