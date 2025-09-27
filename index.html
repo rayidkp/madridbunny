@@ -1,29 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>FanCode Style Web Player</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.0"></script>
-  <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FanCode Style Web Player</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h2>Fan Video Player</h2>
-  </header>
-  <main>
-    <div class="player-box">
-      <video id="myVideo" controls poster="poster.jpg"></video>
-    </div>
-    <div class="url-form">
-      <input type="text" id="videoUrl" placeholder="Paste stream (M3U8/MPD) URL" />
-      <button onclick="playVideo()">Play</button>
-    </div>
-  </main>
-  <footer>
-    <small>Powered by HLS.js • DASH.js • Inspired by FanCode</small>
-  </footer>
-  <script src="player.js"></script>
+
+    <header>
+        <h1>Fan Video Player</h1>
+    </header>
+
+    <div id="video-list">
+        </div>
+
+    <script src="player.js"></script>
+    
 </body>
 </html>
