@@ -16,8 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 videoCard.innerHTML = `
                     <h2>${stream.title}</h2>
                     <p>${stream.desc}</p>
-                    <video id="${stream.id}" controls class="video-player"></video>
-                `;
+                    <video id="${stream.id}" controls class="video-js vjs-default-skin"
 
                 // Add the new card to the main container
                 videoListContainer.appendChild(videoCard);
