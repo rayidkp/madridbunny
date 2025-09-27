@@ -34,28 +34,52 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// Function to initialize the video player (ASSUMES HLS.JS is loaded)
+// Function to initialize the video player
 function initPlayer(videoId, streamUrl) {
     const videoElement = document.getElementById(videoId);
 
-    // --- START: Your Video Player Logic ---
-
-    // **IMPORTANT: Replace this section with the correct setup for your player.**
-    // If you are using HLS.js (most likely based on the deployed page):
-    if (Hls.isSupported() && streamUrl.endsWith('.m3u8')) {
-        const hls = new Hls();
-        hls.loadSource(streamUrl);
-        hls.attachMedia(videoElement);
-        // Add more HLS.js configuration here if needed
-    } 
-    // If it is a standard MP4 or if HLS is supported natively:
-    else if (videoElement.canPlayType('application/vnd.apple.mpegurl') || streamUrl.endsWith('.mp4')) {
-        videoElement.src = streamUrl;
-    } 
-    // Handle other formats or show an error
-    else {
-        console.error('Video format not supported or HLS.js not loaded for stream:', streamUrl);
+    if (!videoElement) {
+        console.error('Video element not found for ID:', videoId);
+        return;
     }
-    
-    // --- END: Your Video Player Logic ---
+
+    const lowerUrl = streamUrl.toLowerCase();
+
+    // ----------------------------------------------------
+    // OPTION A: Handle HLS (.m3u8) streams
+    // ----------------------------------------------------
+    if (lowerUrl.endsWith('.m3u8')) {
+        if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+            console.log('Loading HLS stream:', streamUrl);
+            const hls = new Hls();
+            hls.loadSource(streamUrl);
+            hls.attachMedia(videoElement);
+        } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
+            // Native HLS playback (Safari, etc.)
+            videoElement.src = streamUrl;
+        } else {
+             console.error('HLS stream not supported or HLS.js not loaded.');
+        }
+    } 
+    // ----------------------------------------------------
+    // OPTION B: Handle DASH (.mpd) streams
+    // ----------------------------------------------------
+    else if (lowerUrl.endsWith('.mpd')) {
+        if (typeof dashjs !== 'undefined') {
+            console.log('Loading DASH stream:', streamUrl);
+            const player = dashjs.MediaPlayer().create();
+            player.initialize(videoElement, streamUrl, true); // (videoElement, url, autoPlay)
+        } else {
+            console.error('DASH stream not supported or DASH.js not loaded.');
+        }
+    }
+    // ----------------------------------------------------
+    // OPTION C: Handle standard MP4/WEBM or unsupported formats
+    // ----------------------------------------------------
+    else {
+        // Fallback for standard files like .mp4, or show an error
+        videoElement.src = streamUrl; 
+        console.warn('Stream format not recognized (.m3u8 or .mpd). Attempting native playback:', streamUrl);
+    }
 }
+// (The rest of your player.js code should remain the same)
