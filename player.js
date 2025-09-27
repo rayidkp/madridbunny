@@ -10,18 +10,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // 3. Create the HTML elements for each video
                 const videoCard = document.createElement('div');
-                videoCard.className = 'video-card'; // Add a class for styling
+                videoCard.className = 'video-card'; // Add a class for your custom styling
                 
-                // Create the video tag with the unique ID from the JSON
+                // *** IMPORTANT HTML UPDATE ***
+                // Note the video-js and vjs-default-skin classes
                 videoCard.innerHTML = `
                     <h2>${stream.title}</h2>
                     <p>${stream.desc}</p>
-                    <video id="${stream.id}" controls class="video-js vjs-default-skin"
+                    <video id="${stream.id}" class="video-js vjs-default-skin" controls preload="auto" width="640" height="300"></video>
+                `;
 
                 // Add the new card to the main container
                 videoListContainer.appendChild(videoCard);
                 
-                // 4. Initialize the player for this specific video tag
+                // 4. Initialize the Video.js player
                 initPlayer(stream.id, stream.url);
             });
         })
@@ -33,52 +35,32 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// Function to initialize the video player
+// Function to initialize the Video.js player for both HLS and DASH
 function initPlayer(videoId, streamUrl) {
-    const videoElement = document.getElementById(videoId);
-
-    if (!videoElement) {
-        console.error('Video element not found for ID:', videoId);
-        return;
-    }
-
     const lowerUrl = streamUrl.toLowerCase();
+    let streamType = '';
 
-    // ----------------------------------------------------
-    // OPTION A: Handle HLS (.m3u8) streams
-    // ----------------------------------------------------
     if (lowerUrl.endsWith('.m3u8')) {
-        if (typeof Hls !== 'undefined' && Hls.isSupported()) {
-            console.log('Loading HLS stream:', streamUrl);
-            const hls = new Hls();
-            hls.loadSource(streamUrl);
-            hls.attachMedia(videoElement);
-        } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
-            // Native HLS playback (Safari, etc.)
-            videoElement.src = streamUrl;
-        } else {
-             console.error('HLS stream not supported or HLS.js not loaded.');
-        }
-    } 
-    // ----------------------------------------------------
-    // OPTION B: Handle DASH (.mpd) streams
-    // ----------------------------------------------------
-    else if (lowerUrl.endsWith('.mpd')) {
-        if (typeof dashjs !== 'undefined') {
-            console.log('Loading DASH stream:', streamUrl);
-            const player = dashjs.MediaPlayer().create();
-            player.initialize(videoElement, streamUrl, true); // (videoElement, url, autoPlay)
-        } else {
-            console.error('DASH stream not supported or DASH.js not loaded.');
-        }
+        streamType = 'application/x-mpegURL'; // HLS MIME Type
+    } else if (lowerUrl.endsWith('.mpd')) {
+        streamType = 'application/dash+xml'; // DASH MIME Type
+    } else {
+        streamType = 'video/mp4'; // Fallback for standard video
     }
-    // ----------------------------------------------------
-    // OPTION C: Handle standard MP4/WEBM or unsupported formats
-    // ----------------------------------------------------
-    else {
-        // Fallback for standard files like .mp4, or show an error
-        videoElement.src = streamUrl; 
-        console.warn('Stream format not recognized (.m3u8 or .mpd). Attempting native playback:', streamUrl);
-    }
+
+    // Initialize the Video.js player using its unique ID
+    const player = videojs(videoId, {
+        // Optional player options can go here (e.g., fluid: true)
+    });
+
+    // Load the source dynamically
+    player.src({
+        src: streamUrl,
+        type: streamType
+    });
+
+    // Optional: Auto-play the video if the stream is marked as live
+    // player.play(); 
+    
+    console.log(`Video.js initialized for ${streamUrl}`);
 }
-// (The rest of your player.js code should remain the same)
