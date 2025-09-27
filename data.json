@@ -1,23 +1,11 @@
 {
   "streams": [
     {
-      "id": "player1", 
+      "id": "embed1", 
       "title": "Match 1: Real Madrid VS Atlético Madrid (LIVE)",
-      "url": "/stream-proxy/mumbai/137326_english_hls_f94a7354ec25270ta-di_h264/index.m3u8", 
+      // Use the embed format of the working player
+      "url": "https://hls-player-three.vercel.app/?id=137326&cdn=fancode_cdn", 
       "desc": "Starts at 10:00 AM"
-    },
-    {
-      "id": "player2", 
-      "title": "Highlight Show Replay",
-      "url": "https://example.com/stream2/playlist.m3u8", 
-      "desc": "Available on demand"
-    },
-    {
-      "id": "player3", 
-      "title": "Upcoming: Team C vs Team D",
-      "url": "https://example.com/stream3/playlist.m3u8", 
-      "desc": "Starts later today"
     }
-  ],
-  "last_updated": "2025-09-27"
+  ]
 }
